@@ -20,7 +20,7 @@ export default function Home() {
     }
 
     try {
-      const response = await axios.post("http://localhost:8000/api/register", {
+      const response = await axios.post("http://localhost:8000/register", {
         username,
         password,
       });

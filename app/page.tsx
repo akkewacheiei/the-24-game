@@ -22,7 +22,7 @@ export default function Home() {
     try {
       const token = localStorage.getItem("token");
       // ส่ง token ไปกับคำขอ
-      const response = await axios.get("http://localhost:8000/api/user", {
+      const response = await axios.get("http://localhost:8000/user", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -36,7 +36,7 @@ export default function Home() {
 
   const handleSignIn = async () => {
     try {
-      const response = await axios.post("http://localhost:8000/api/login", {
+      const response = await axios.post("http://localhost:8000/login", {
         username: username,
         password: password,
       });

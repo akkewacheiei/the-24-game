@@ -64,7 +64,7 @@ const User = sequelize.define(
   {}
 );
 
-app.post("/api/register", async (req, res) => {
+app.post("/register", async (req, res) => {
   try {
     const { username, password } = req.body;
     console.log("username:", username);
@@ -96,7 +96,7 @@ app.post("/api/register", async (req, res) => {
   }
 });
 
-app.post("/api/login", async (req, res) => {
+app.post("/login", async (req, res) => {
   const { username, password } = req.body;
   const [result] = await conn.query(
     "SELECT * from users WHERE username = ?",
@@ -117,7 +117,7 @@ app.post("/api/login", async (req, res) => {
   res.send({ message: "Login successful", token });
 });
 
-app.get("/api/user", async (req, res) => {
+app.get("/user", async (req, res) => {
   try {
     const authHeader = req.headers["authorization"];
     let authToken = "";

@@ -28,8 +28,8 @@ const authRoutes = require('./routes/auth');
 const gameRoutes = require('./routes/game');
 
 // Use routes
-app.use('/api', authRoutes);
-app.use('/api', gameRoutes);
+app.use(authRoutes);
+app.use(gameRoutes);
 
 // Listen
 app.listen(port, async () => {
