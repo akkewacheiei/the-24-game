@@ -22,7 +22,7 @@ export default function Navbar(): JSX.Element {
           <div className="text-black font-bold cursor-pointer">The 24 Game</div>
         </div>
 
-        <div id="menu" className="hidden lg:flex gap-10">
+        <div id="menu" className=" lg:flex gap-10">
           <div
             onClick={handleLogout}
             className={`text-black font-medium cursor-pointer`}
