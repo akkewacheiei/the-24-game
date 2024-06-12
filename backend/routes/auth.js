@@ -9,8 +9,7 @@ const secret = "mysecret";
 router.post("/register", async (req, res) => {
   try {
     const { username, password } = req.body;
-    console.log("username:", username);
-    console.log("password:", password);
+    
     const passwordHash = await bcrypt.hash(password, 10);
     const userData = {
       username,
@@ -72,6 +71,7 @@ router.get("/user", async (req, res) => {
     }
 
     const decoded = jwt.verify(authToken, secret);
+    //ดึงข้อมูลของ user โดยนำฟิลด์ password ออก
     const user = await User.findOne({ where: { username: decoded.username }, attributes: { exclude: ['password'] } });
 
     if (!user) {
