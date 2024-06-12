@@ -54,12 +54,12 @@ const User = sequelize.define(
     username: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true
+      unique: true,
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-    }
+    },
   },
   {}
 );
@@ -74,13 +74,12 @@ app.post("/api/register", async (req, res) => {
       username,
       password: passwordHash,
     };
-   // const [results] = await conn.query("INSERT INTO users SET ?", userData);
+    // const [results] = await conn.query("INSERT INTO users SET ?", userData);
     const results = await User.create(userData);
 
- 
     res.json({
       message: "insert ok",
-      results
+      results,
     });
   } catch (error) {
     console.log("error", error);
@@ -96,7 +95,6 @@ app.post("/api/register", async (req, res) => {
     }
   }
 });
-
 
 app.post("/api/login", async (req, res) => {
   const { username, password } = req.body;
@@ -116,6 +114,44 @@ app.post("/api/login", async (req, res) => {
   res.send({ message: "Login successful", token });
 });
 
+app.get("/api/user", async (req, res) => {
+  try {
+    const authHeader = req.headers["authorization"];
+    let authToken = "";
+    if (authHeader) {
+      authToken = authHeader.split(" ")[1];
+    }
+
+    const user = jwt.verify(authToken, secret); 
+
+    const [checkResults] = await conn.query(
+      "SELECT * from users where username = ?",
+      user.username
+    );
+  
+    if (!checkResults[0]) {
+      throw { message: "user not found" };
+    }
+
+    const results = checkResults.map((user) => user);
+
+    // สร้าง object ใหม่โดยลบฟิลด์ password ออก
+    const modifiedResponse = {
+      user: results.map((user) => {
+        const { password, ...userWithoutPassword } = user;
+        return userWithoutPassword;
+      }),
+    };
+
+    res.json({ user: modifiedResponse });
+  } catch (error) {
+    console.error(error);
+    res.status(403).json({
+      message: "authenication fail",
+      error,
+    });
+  }
+});
 
 // Listen
 app.listen(port, async () => {
