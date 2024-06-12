@@ -66,11 +66,11 @@ const canForm24 = (numbers) => {
 
 router.get("/generate-numbers", (req, res) => {
   let numbers = generateRandomNumbers();
+  //วนลูป generate เลขไปเรื่อยๆ จนกว่าจะได้ชุดที่สามารถดำเนินการเป็น 24 ได้
   while (!canForm24(numbers)) {
     numbers = generateRandomNumbers();
   }
 
-  // ส่งผลลัพธ์กลับไปยัง client
   res.json({ numbers });
 });
 
