@@ -8,6 +8,7 @@ export default function Home() {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -47,6 +48,7 @@ export default function Home() {
       fetchUserData();
     } catch (error) {
       console.error("Error logging in", error);
+      setError("Invalid username or password. Please try again.");
     }
   };
 
@@ -81,6 +83,7 @@ export default function Home() {
             >
               Sign In
             </button>
+            {error && <p className="text-red-500 text-sm">{error}</p>}
             <p className="text-center">
               Don't have an account?{" "}
               <Link href="/register">
