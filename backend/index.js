@@ -48,7 +48,6 @@ const sequelize = new Sequelize("the_24_game", "root", "root_password", {
 });
 
 //sequenlize ตอนสร้าง table จะมี auto เพิ่ม id, created_at, updated_at
-// เพิ่ม table User เข้ามา และ validation
 const User = sequelize.define(
   "users",
   {
@@ -65,7 +64,6 @@ const User = sequelize.define(
   {}
 );
 
-/* เราจะแก้ไข code ที่อยู่ตรงกลาง */
 app.post("/api/register", async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -97,6 +95,25 @@ app.post("/api/register", async (req, res) => {
       });
     }
   }
+});
+
+
+app.post("/api/login", async (req, res) => {
+  const { username, password } = req.body;
+  const [result] = await conn.query(
+    "SELECT * from users WHERE username = ?",
+    username
+  );
+  const user = result[0];
+  const match = await bcrypt.compare(password, user.password);
+
+  if (!match) {
+    return res.status(400).send({ message: "Invalid username or password" });
+  }
+
+  const token = jwt.sign({ username }, secret, { expiresIn: "7d" });
+
+  res.send({ message: "Login successful", token });
 });
 
 
