@@ -1,33 +1,43 @@
-import { Sequelize, DataTypes, Model } from 'sequelize';
-import { sequelize } from '../config/db';
+import { Model, DataTypes, Optional } from 'sequelize';
+import { sequelize } from "../config/db";
 
 interface UserAttributes {
+  id: number;
   username: string;
   password: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
-class User extends Model<UserAttributes> implements UserAttributes {
+interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+
+class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+  public id!: number;
   public username!: string;
   public password!: string;
+
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
 }
 
-User.init(
-  {
-    username: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
+User.init({
+  id: {
+    type: DataTypes.INTEGER.UNSIGNED,
+    autoIncrement: true,
+    primaryKey: true,
   },
-  {
-    sequelize,
-    modelName: 'User',
-    tableName: 'users',
-  }
-);
+  username: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+}, {
+  sequelize,
+  tableName: 'users',
+  timestamps: true,
+});
 
-export { User };
+export default User;

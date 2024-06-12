@@ -1,5 +1,6 @@
 import express, { Router, Request, Response } from "express";
 import { evaluate } from "mathjs";
+import { History } from "../models/index";
 
 const router: Router = express.Router();
 
@@ -52,7 +53,7 @@ const canForm24 = (numbers: number[]): boolean => {
           for (const expr of expressions) {
             try {
               const result = evaluate(expr);
-              if (typeof result === 'number' && result === 24) {
+              if (typeof result === "number" && result === 24) {
                 return true;
               }
             } catch (e) {
@@ -74,6 +75,35 @@ router.get("/generate-numbers", (req: Request, res: Response) => {
   }
 
   res.json({ numbers });
+});
+
+router.post("/submit-solution", async (req: Request, res: Response) => {
+  const { userId, numbers, solution } = req.body;
+
+  // ตรวจสอบว่าคำตอบที่ผู้ใช้ส่งมาถูกต้องหรือไม่
+  let isCorrect: boolean = false;
+  try {
+    if (evaluate(solution) === 24) {
+      isCorrect = true;
+    }
+  } catch (e) {
+    isCorrect = false;
+  }
+
+  console.log("isCorrect:", isCorrect);
+
+  if (isCorrect) {
+    const historyCreated = {
+      numbers: JSON.stringify(numbers),
+      solution,
+      isCorrect,
+      UserId: userId, //default ของ Sequelize ตั้งค่าความสัมพันธ์ กำหนดชื่อฟิลด์ขึ้นต้นเป็นพิมพ์ใหญ่ "UserId"
+    };
+
+    await History.create(historyCreated);
+  }
+
+  res.json({ isCorrect });
 });
 
 export default router;
