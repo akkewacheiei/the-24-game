@@ -24,7 +24,7 @@ router.post("/register", async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     console.log("error", error);
-    if (error.code === "ER_DUP_ENTRY") {
+    if (error.original.code === "ER_DUP_ENTRY") {
       res.status(409).json({
         message: "Username already exists",
       });

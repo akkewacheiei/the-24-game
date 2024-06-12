@@ -32,7 +32,7 @@ app.use(gameRoutes);
 
 // Listen
 app.listen(port, async () => {
-  await sequelize.sync({ force: true });
-  //await sequelize.sync();
+  //await sequelize.sync({ force: true });
+  await sequelize.sync();
   console.log("Server started at port 8000");
 });

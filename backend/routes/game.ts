@@ -106,7 +106,7 @@ router.post("/submit-solution", async (req: Request, res: Response) => {
   res.json({ isCorrect });
 });
 
-router.get("/history", async (req, res) => {
+router.get("/history", async (req: Request, res: Response) => {
   const userId = parseInt(req.query.userId as string, 10); // แปลง userId ให้เป็น number
 
   if (!userId) {
@@ -120,5 +120,67 @@ router.get("/history", async (req, res) => {
     res.status(500).json({ error: "An error occurred while fetching history" });
   }
 });
+
+router.post("/cheat", (req: Request, res: Response) => {
+  const { numbers } = req.body;
+
+  if (!numbers || !Array.isArray(numbers) || numbers.length !== 4) {
+    return res.status(400).json({ error: 'Invalid input. Please provide an array of 4 numbers.' });
+  }
+
+  const operators = ['+', '-', '*', '/'];
+  const permutations: number[][] = permute(numbers);
+
+  const validExpressions: string[] = [];
+  for (const nums of permutations) {
+    for (const op1 of operators) {
+      for (const op2 of operators) {
+        for (const op3 of operators) {
+          const expressions = [
+            `${nums[0]}${op1}${nums[1]}${op2}${nums[2]}${op3}${nums[3]}`,
+            `(${nums[0]}${op1}${nums[1]})${op2}${nums[2]}${op3}${nums[3]}`,
+            `${nums[0]}${op1}(${nums[1]}${op2}${nums[2]})${op3}${nums[3]}`,
+            `${nums[0]}${op1}${nums[1]}${op2}(${nums[2]}${op3}${nums[3]})`,
+            `(${nums[0]}${op1}${nums[1]})${op2}(${nums[2]}${op3}${nums[3]})`,
+            `(${nums[0]}${op1}(${nums[1]}${op2}${nums[2]}))${op3}${nums[3]}`,
+            `(${nums[0]}${op1}${nums[1]}${op2}${nums[2]})${op3}${nums[3]}`,
+          ];
+
+          for (const expr of expressions) {
+            try {
+              const result = evaluate(expr);
+              if (typeof result === 'number' && result === 24 && !validExpressions.includes(expr)) {
+                validExpressions.push(expr);
+              }
+            } catch (e) {
+              continue;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return res.json({ validExpressions });
+});
+
+// ฟังก์ชันสำหรับการสร้าง permutations
+const permute = (array: number[]): number[][] => {
+  const results: number[][] = [];
+  const permuteArray = (arr: number[], m: number[] = []): void => {
+    if (arr.length === 0) {
+      results.push(m);
+    } else {
+      for (let i = 0; i < arr.length; i++) {
+        const curr = arr.slice();
+        const next = curr.splice(i, 1);
+        permuteArray(curr.slice(), m.concat(next));
+      }
+    }
+  };
+  permuteArray(array);
+  return results;
+};
+
 
 export default router;
