@@ -6,6 +6,7 @@ interface HistoryAttributes {
   numbers: string;
   solution: string;
   isCorrect: boolean;
+  userId: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -17,6 +18,7 @@ class History extends Model<HistoryAttributes, HistoryCreationAttributes> implem
   public numbers!: string;
   public solution!: string;
   public isCorrect!: boolean;
+  public userId!: number;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -38,6 +40,10 @@ History.init({
   },
   isCorrect: {
     type: DataTypes.BOOLEAN,
+    allowNull: false,
+  },
+  userId: {
+    type: DataTypes.INTEGER.UNSIGNED,
     allowNull: false,
   },
 }, {

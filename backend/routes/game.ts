@@ -97,13 +97,28 @@ router.post("/submit-solution", async (req: Request, res: Response) => {
       numbers: JSON.stringify(numbers),
       solution,
       isCorrect,
-      UserId: userId, //default ของ Sequelize ตั้งค่าความสัมพันธ์ กำหนดชื่อฟิลด์ขึ้นต้นเป็นพิมพ์ใหญ่ "UserId"
+      userId,
     };
 
     await History.create(historyCreated);
   }
 
   res.json({ isCorrect });
+});
+
+router.get("/history", async (req, res) => {
+  const userId = parseInt(req.query.userId as string, 10); // แปลง userId ให้เป็น number
+
+  if (!userId) {
+    return res.status(400).json({ error: "userId is required" });
+  }
+
+  try {
+    const histories = await History.findAll({ where: { userId: userId } });
+    res.json(histories);
+  } catch (error) {
+    res.status(500).json({ error: "An error occurred while fetching history" });
+  }
 });
 
 export default router;
