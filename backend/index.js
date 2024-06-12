@@ -120,7 +120,8 @@ app.post("/api/login", async (req, res) => {
 // Listen
 app.listen(port, async () => {
   await initMySQL();
-  await sequelize.sync({ force: true });
+  //await sequelize.sync({ force: true });
+  await sequelize.sync();
 
   console.log("Server started at port 8000");
 });
