@@ -143,7 +143,7 @@ app.get("/api/user", async (req, res) => {
       }),
     };
 
-    res.json({ user: modifiedResponse });
+    res.json({ user: modifiedResponse.user[0] });
   } catch (error) {
     console.error(error);
     res.status(403).json({

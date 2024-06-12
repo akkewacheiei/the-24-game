@@ -1,11 +1,37 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      // ถ้ามี token อยู่ใน local storage ใช้ token นี้ส่งคำขอไปยังเซิร์ฟเวอร์เพื่อตรวจสอบสถานะเซสชัน
+      fetchUserData();
+    }
+  }, []);
+
+  const fetchUserData = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      // ส่ง token ไปกับคำขอ
+      const response = await axios.get("http://localhost:8000/api/user", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("user data:", response.data.user);
+      router.push("/game");
+    } catch (error) {
+      console.error("Error fetching user data", error);
+    }
+  };
 
   const handleSignIn = async () => {
     try {
@@ -17,6 +43,8 @@ export default function Home() {
       const token = response.data.token;
       // บันทึก token ไว้ใน local storage
       localStorage.setItem("token", token);
+      // เรียกใช้ fetchUserData เมื่อ login สำเร็จ
+      fetchUserData();
     } catch (error) {
       console.error("Error logging in", error);
     }
