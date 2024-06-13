@@ -13,7 +13,11 @@ type HistoryItem = {
   updatedAt: Date;
 };
 
-const HistoryPage: React.FC = () => {
+interface user {
+  userId: number | undefined;
+}
+
+const HistoryPage: React.FC<user> = ({userId}) => {
   const [history, setHistory] = useState<HistoryItem[]>([]);
 
   useEffect(() => {
@@ -21,7 +25,7 @@ const HistoryPage: React.FC = () => {
       try {
         const response = await axios.get("http://localhost:8000/history", {
           params: {
-            userId: 2,
+            userId,
           },
         });
 

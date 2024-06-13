@@ -171,7 +171,10 @@ export default function Game() {
             ) : (
               <div className="flex flex-col items-center gap-3">
                 <p className="text-4xl font-bold">Hello "{user?.username}"</p>
-                <p  className="cursor-pointer" onClick={() => setViewHistory(true)}>
+                <p
+                  className="cursor-pointer"
+                  onClick={() => setViewHistory(true)}
+                >
                   {"-> View history"}
                 </p>
                 <button
@@ -192,7 +195,7 @@ export default function Game() {
             >
               {"<- Main Page"}
             </p>
-            <History></History>
+            <History userId={user?.id}></History>
           </>
         )}
       </div>
