@@ -1,7 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import Navbar from "../../components/Navbar/index";
 import axios from "axios";
 
 type HistoryItem = {
