@@ -30,7 +30,9 @@ export default function Home() {
   return (
     <div>
       <Navbar></Navbar>
-      <h1 className="pt-[100px]">Game Page</h1>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-300 to-purple-400 gap-11">
+        <button className="border-[1px] shadow-lg rounded-lg bg-orange-400 w-[10rem] h-[5rem] text-white font-bold text-xl">เริ่มเกม</button>
+      </div>
     </div>
   );
 }
