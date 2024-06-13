@@ -48,6 +48,10 @@ export default function Home() {
   };
 
   const handleStart = async () => {
+    setSolution("");
+    setFeedback("");
+    setValidExpressions([]);
+
     try {
       const response = await axios.get(
         "http://localhost:8000/generate-numbers"
@@ -86,7 +90,7 @@ export default function Home() {
         numbers,
       });
       console.log("handleGetSolutions res:", response);
-      setValidExpressions(response.data.validExpressions)
+      setValidExpressions(response.data.validExpressions);
     } catch (error) {
       console.error("Error cheat:", error);
     }
@@ -95,14 +99,16 @@ export default function Home() {
   return (
     <div>
       <Navbar></Navbar>
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-300 to-purple-400 gap-11">
+      <div className="min-h-screen p-[10rem] flex flex-col items-center justify-center bg-gradient-to-r from-blue-300 to-purple-400 gap-11">
         {numbers.length > 0 ? (
           <div className="flex flex-col items-center gap-3">
             <button
-              onClick={() => setNumbers([])}
+              onClick={() => {
+                setNumbers([]);
+              }}
               className="border-[1px] shadow-lg rounded-lg bg-green-400 w-[10rem] h-[2.5rem] text-white font-bold"
             >
-              {"Pause Game"}
+              {"Quit"}
             </button>
             <div className="mt-5 text-white text-xl">
               Generated Numbers: {numbers.join(", ")}
@@ -117,28 +123,47 @@ export default function Home() {
               />
               <button
                 onClick={handleSubmitSolution}
-                className="ml-3 border-[1px] shadow-lg rounded-lg bg-green-400 w-[10rem] h-[2.5rem] text-white font-bold text-xl"
+                className="ml-3 border-[1px] shadow-lg rounded-lg bg-green-400 w-[5rem] h-[2.5rem] text-white font-bold"
               >
                 Submit
               </button>
             </div>
             {feedback && (
-              <div className="mt-5 text-white text-xl">{feedback}</div>
+              <div
+                className={`mt-5 ${
+                  feedback === "Correct!" ? `text-white` : `text-red-500`
+                } font-bold  text-xl`}
+              >
+                {feedback}
+              </div>
             )}
 
-            <button
-              onClick={handleGetSolutions}
-              className="mt-5 border-[1px] shadow-lg rounded-lg bg-green-400 w-[10rem] h-[2.5rem] text-white font-bold"
-            >
-              {"Get Solutions"}
-            </button>
-            <ul className="flex gap-3">
-            {
-              validExpressions.length > 0 && validExpressions.map((item, index)=> (  
-                 <li key={index}>{item}</li>
-                ))
-            }
-              </ul>
+            <div className="mt-5 flex items-center gap-6 ">
+              <button
+                onClick={handleGetSolutions}
+                className="border-[1px] shadow-lg rounded-lg bg-green-400 w-[10rem] h-[2.5rem] text-white font-bold"
+              >
+                {"Get Solutions"}
+              </button>
+              <p
+                className=" text-red-600 font-bold cursor-pointer"
+                onClick={() => setValidExpressions([])}
+              >
+                Clear
+              </p>
+            </div>
+
+            <h2>
+              {validExpressions.length > 0 &&
+                `${validExpressions.length} solutions found`}
+            </h2>
+
+            <div className="flex gap-10 flex-wrap w-[20rem]">
+              {validExpressions.length > 0 &&
+                validExpressions.map((item, index) => (
+                  <p key={index}>{item}</p>
+                ))}
+            </div>
           </div>
         ) : (
           <div className="flex flex-col items-center gap-3">
