@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import fetchUserData from "../utils/fetchUserData";
 
 export default function Home() {
   const router = useRouter();
@@ -14,23 +15,15 @@ export default function Home() {
     const token = localStorage.getItem("token");
     if (token) {
       // ถ้ามี token อยู่ใน local storage ใช้ token นี้ส่งคำขอไปยังเซิร์ฟเวอร์เพื่อตรวจสอบสถานะเซสชัน
-      fetchUserData();
+      checkAuth();
     }
   }, []);
 
-  const fetchUserData = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      // ส่ง token ไปกับคำขอ
-      const response = await axios.get("http://localhost:8000/user", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log("user data:", response.data.user);
+  const checkAuth = async () => {
+    const isAuth = await fetchUserData();
+
+    if (isAuth) {
       router.push("/game");
-    } catch (error) {
-      console.error("Error fetching user data", error);
     }
   };
 
@@ -44,8 +37,8 @@ export default function Home() {
       const token = response.data.token;
       // บันทึก token ไว้ใน local storage
       localStorage.setItem("token", token);
-      // เรียกใช้ fetchUserData เมื่อ login สำเร็จ
-      fetchUserData();
+      // เรียกใช้ checkAuth เมื่อ login สำเร็จ
+      checkAuth();
     } catch (error) {
       console.error("Error logging in", error);
       setError("Invalid username or password. Please try again.");

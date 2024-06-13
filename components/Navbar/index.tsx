@@ -19,7 +19,7 @@ export default function Navbar(): JSX.Element {
         className="bg-white flex justify-between items-center border-black border-b border-opacity-10 fixed w-full"
       >
         <div id="logo">
-          <div className="text-black font-bold cursor-pointer">The 24 Game</div>
+          <div className="text-black font-bold cursor-pointer text-xl">The <span className=" text-purple-600 ">24</span> Game</div>
         </div>
 
         <div id="menu" className=" lg:flex gap-10">
