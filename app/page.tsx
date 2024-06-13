@@ -7,9 +7,9 @@ import fetchUserData from "../utils/fetchUserData";
 
 export default function Home() {
   const router = useRouter();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string>("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
