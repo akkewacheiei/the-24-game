@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar/index";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import Link from 'next/link'
 
 interface user {
   id: number;
@@ -111,11 +112,12 @@ export default function Home() {
             )}
           </div>
         ) : (
-          <div>
-            <p className="text-xl mb-14">สวัสดี คุณ "{user?.username}"</p>
+          <div className="flex flex-col items-center gap-3">
+            <p className="text-xl ">สวัสดี คุณ "{user?.username}"</p>
+            <Link href="/history">{"-> ดูประวัติการเล่น"}</Link>
             <button
               onClick={handleStart}
-              className="border-[1px] shadow-lg rounded-lg bg-green-400 w-[10rem] h-[5rem] text-white font-bold text-xl"
+              className="mt-14 border-[1px] shadow-lg rounded-lg bg-green-400 w-[10rem] h-[5rem] text-white font-bold text-xl"
             >
               {"Start Game"}
             </button>
