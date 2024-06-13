@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar/index";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import Link from 'next/link'
+import Link from "next/link";
 
 interface user {
   id: number;
@@ -16,6 +16,7 @@ export default function Home() {
   const [solution, setSolution] = useState<string>("");
   const [feedback, setFeedback] = useState<string>("");
   const [user, setUser] = useState<user>();
+  const [validExpressions, setValidExpressions] = useState<string[]>([]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -77,17 +78,31 @@ export default function Home() {
     }
   };
 
+  const handleGetSolutions = async () => {
+    console.log("numbers:", numbers);
+
+    try {
+      const response = await axios.post("http://localhost:8000/cheat", {
+        numbers,
+      });
+      console.log("handleGetSolutions res:", response);
+      setValidExpressions(response.data.validExpressions)
+    } catch (error) {
+      console.error("Error cheat:", error);
+    }
+  };
+
   return (
     <div>
       <Navbar></Navbar>
       <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-300 to-purple-400 gap-11">
         {numbers.length > 0 ? (
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center gap-3">
             <button
               onClick={() => setNumbers([])}
-              className="border-[1px] shadow-lg rounded-lg bg-green-400 text-white font-bold"
+              className="border-[1px] shadow-lg rounded-lg bg-green-400 w-[10rem] h-[2.5rem] text-white font-bold"
             >
-              {"เปลี่ยนโจทย์"}
+              {"Pause Game"}
             </button>
             <div className="mt-5 text-white text-xl">
               Generated Numbers: {numbers.join(", ")}
@@ -110,6 +125,20 @@ export default function Home() {
             {feedback && (
               <div className="mt-5 text-white text-xl">{feedback}</div>
             )}
+
+            <button
+              onClick={handleGetSolutions}
+              className="mt-5 border-[1px] shadow-lg rounded-lg bg-green-400 w-[10rem] h-[2.5rem] text-white font-bold"
+            >
+              {"Get Solutions"}
+            </button>
+            <ul className="flex gap-3">
+            {
+              validExpressions.length > 0 && validExpressions.map((item, index)=> (  
+                 <li key={index}>{item}</li>
+                ))
+            }
+              </ul>
           </div>
         ) : (
           <div className="flex flex-col items-center gap-3">
