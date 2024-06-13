@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar/index";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import Link from "next/link";
 import History from "../../components/History/index";
 
 interface user {
@@ -11,7 +10,7 @@ interface user {
   username: string;
 }
 
-export default function Home() {
+export default function Game() {
   const router = useRouter();
   const [numbers, setNumbers] = useState<number[]>([]);
   const [solution, setSolution] = useState<string>("");

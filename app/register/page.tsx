@@ -4,7 +4,7 @@ import Link from "next/link";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
-export default function Home() {
+export default function Register() {
   const router = useRouter();
 
   const [username, setUsername] = useState<string>("");
