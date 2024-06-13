@@ -79,6 +79,8 @@ router.get("/generate-numbers", (req: Request, res: Response) => {
 
 router.post("/submit-solution", async (req: Request, res: Response) => {
   const { userId, numbers, solution } = req.body;
+  console.log("req.body:", req.body);
+  
 
   // ตรวจสอบว่าคำตอบที่ผู้ใช้ส่งมาถูกต้องหรือไม่
   let isCorrect: boolean = false;
