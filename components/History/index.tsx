@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { API_BASE_URL } from "../../config";
 
 type HistoryItem = {
   id: number;
@@ -15,13 +16,13 @@ interface user {
   userId: number | undefined;
 }
 
-const HistoryPage: React.FC<user> = ({userId}) => {
+const HistoryPage: React.FC<user> = ({ userId }) => {
   const [history, setHistory] = useState<HistoryItem[]>([]);
 
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/history", {
+        const response = await axios.get(`${API_BASE_URL}/history`, {
           params: {
             userId,
           },

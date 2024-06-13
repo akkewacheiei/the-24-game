@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-
+import { API_BASE_URL } from '../config';
 
 export default function Home() {
   const router = useRouter();
@@ -23,7 +23,7 @@ export default function Home() {
     try {
       const token = localStorage.getItem("token");
       // ส่ง token ไปกับคำขอ
-      const response = await axios.get("http://localhost:8000/user", {
+      const response = await axios.get(`${API_BASE_URL}/user`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -38,7 +38,7 @@ export default function Home() {
 
   const handleSignIn = async () => {
     try {
-      const response = await axios.post("http://localhost:8000/login", {
+      const response = await axios.post(`${API_BASE_URL}/login`, {
         username: username,
         password: password,
       });

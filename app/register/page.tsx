@@ -3,6 +3,8 @@ import { useState, ChangeEvent, FormEvent } from "react";
 import Link from "next/link";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { API_BASE_URL } from '../../config';
+
 
 export default function Register() {
   const router = useRouter();
@@ -20,7 +22,7 @@ export default function Register() {
     }
 
     try {
-      const response = await axios.post("http://localhost:8000/register", {
+      const response = await axios.post(`${API_BASE_URL}/register`, {
         username,
         password,
       });

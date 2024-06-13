@@ -4,6 +4,7 @@ import Navbar from "../../components/Navbar/index";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import History from "../../components/History/index";
+import { API_BASE_URL } from '../../config';
 
 interface user {
   id: number;
@@ -34,7 +35,7 @@ export default function Game() {
     try {
       const token = localStorage.getItem("token");
       // ส่ง token ไปกับคำขอ
-      const response = await axios.get("http://localhost:8000/user", {
+      const response = await axios.get(`${API_BASE_URL}/user`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -55,7 +56,7 @@ export default function Game() {
 
     try {
       const response = await axios.get(
-        "http://localhost:8000/generate-numbers"
+        `${API_BASE_URL}/generate-numbers`
       );
       setNumbers(response.data.numbers);
     } catch (error) {
@@ -67,7 +68,7 @@ export default function Game() {
     try {
       const userId = user?.id;
       const response = await axios.post(
-        "http://localhost:8000/submit-solution",
+        `${API_BASE_URL}/submit-solution`,
         {
           userId,
           numbers,
@@ -87,7 +88,7 @@ export default function Game() {
     console.log("numbers:", numbers);
 
     try {
-      const response = await axios.post("http://localhost:8000/cheat", {
+      const response = await axios.post(`${API_BASE_URL}/cheat`, {
         numbers,
       });
       console.log("handleGetSolutions res:", response);
