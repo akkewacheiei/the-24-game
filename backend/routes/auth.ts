@@ -4,13 +4,13 @@ import jwt from "jsonwebtoken";
 import { User } from "../models/index";
 const router: Router = express.Router();
 
-const secret = "mysecret";
+const secret: string = "mysecret";
 
 router.post("/register", async (req: Request, res: Response) => {
   try {
     const { username, password } = req.body;
 
-    const passwordHash = await bcrypt.hash(password, 10);
+    const passwordHash : string = await bcrypt.hash(password, 10);
     const userData = {
       username,
       password: passwordHash,
