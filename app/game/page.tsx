@@ -1,53 +1,20 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import Navbar from "../../components/Navbar/index";
-import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import Navbar from "@/components/Navbar/index";
 import axios from "axios";
 import History from "../../components/History/index";
-import { API_BASE_URL } from '../../config';
-
-interface user {
-  id: number;
-  username: string;
-}
+import { API_BASE_URL } from "../../config";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Game() {
-  const router = useRouter();
+  const { authState } = useAuth();
+  const { user } = authState;
+
   const [numbers, setNumbers] = useState<number[]>([]);
   const [solution, setSolution] = useState<string>("");
   const [feedback, setFeedback] = useState<string>("");
-  const [user, setUser] = useState<user>();
   const [validExpressions, setValidExpressions] = useState<string[]>([]);
   const [viewHistory, setViewHistory] = useState<boolean>(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      // ถ้ามี token อยู่ใน local storage ใช้ token นี้ส่งคำขอไปยังเซิร์ฟเวอร์เพื่อตรวจสอบสถานะเซสชัน
-      fetchUserData();
-    } else {
-      //ถ้าไม่มี token เตะออกไปหน้า landing page
-      router.push("/");
-    }
-  }, []);
-
-  const fetchUserData = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      // ส่ง token ไปกับคำขอ
-      const response = await axios.get(`${API_BASE_URL}/user`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log("user data:", response.data.user);
-      setUser(response.data.user);
-    } catch (error) {
-      console.error("Error fetching user data", error);
-      //ถ้าเซสชันหมดอายุ เตะออกไปหน้า landing page
-      router.push("/");
-    }
-  };
 
   const handleStart = async () => {
     setSolution("");
@@ -55,9 +22,7 @@ export default function Game() {
     setValidExpressions([]);
 
     try {
-      const response = await axios.get(
-        `${API_BASE_URL}/generate-numbers`
-      );
+      const response = await axios.get(`${API_BASE_URL}/generate-numbers`);
       setNumbers(response.data.numbers);
     } catch (error) {
       console.error("Error generating numbers:", error);
@@ -67,14 +32,11 @@ export default function Game() {
   const handleSubmitSolution = async () => {
     try {
       const userId = user?.id;
-      const response = await axios.post(
-        `${API_BASE_URL}/submit-solution`,
-        {
-          userId,
-          numbers,
-          solution,
-        }
-      );
+      const response = await axios.post(`${API_BASE_URL}/submit-solution`, {
+        userId,
+        numbers,
+        solution,
+      });
       setFeedback(
         response.data.isCorrect ? "Correct!" : "Incorrect, try again."
       );
@@ -100,7 +62,7 @@ export default function Game() {
 
   return (
     <div>
-      <Navbar></Navbar>
+      <Navbar />
       <div className="min-h-screen p-[10rem] flex flex-col items-center justify-center bg-gradient-to-r from-blue-300 to-purple-400 gap-11">
         {!viewHistory ? (
           <>
@@ -189,7 +151,6 @@ export default function Game() {
           </>
         ) : (
           <>
-            {" "}
             <p
               className="font-bold cursor-pointer"
               onClick={() => setViewHistory(false)}

@@ -1,14 +1,8 @@
 import React from "react";
-import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Navbar(): JSX.Element {
-  const router = useRouter();
-
-  const handleLogout = () => {
-    // ลบ token ที่เก็บไว้ใน local storage
-    localStorage.removeItem("token");
-    router.push("/");
-  };
+  const { logout } = useAuth();
 
   return (
     <div className="bg-white flex justify-between items-center border-black border-b border-opacity-10 fixed w-full h-[58px] py-0 px-[10%]">
@@ -20,10 +14,10 @@ export default function Navbar(): JSX.Element {
 
       <div className=" lg:flex gap-10">
         <div
-          onClick={handleLogout}
+          onClick={logout}
           className={`text-black font-medium cursor-pointer`}
         >
-          Sign Out
+          Logout
         </div>
       </div>
     </div>

@@ -2,19 +2,19 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
-import { useRouter } from "next/navigation";
-import { API_BASE_URL } from '../config';
+import { API_BASE_URL } from "../config";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Home() {
-  const router = useRouter();
+  const { login } = useAuth();
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    //ถ้ามี token เก็บอยู่แล้ว ให้นำไปเช็คเซสชัน
     if (token) {
-      // ถ้ามี token อยู่ใน local storage ใช้ token นี้ส่งคำขอไปยังเซิร์ฟเวอร์เพื่อตรวจสอบสถานะเซสชัน
       fetchUserData();
     }
   }, []);
@@ -22,15 +22,13 @@ export default function Home() {
   const fetchUserData = async () => {
     try {
       const token = localStorage.getItem("token");
-      // ส่ง token ไปกับคำขอ
+      //ส่ง token ไปกับคำขอ
       const response = await axios.get(`${API_BASE_URL}/user`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      console.log("user data:", response.data.user);
-      router.push('/game')
+      login(response.data.user); // ใช้ฟังก์ชัน login ใน AuthContext
     } catch (error) {
       console.error("Error fetching user data", error);
     }
@@ -39,12 +37,10 @@ export default function Home() {
   const handleSignIn = async () => {
     try {
       const response = await axios.post(`${API_BASE_URL}/login`, {
-        username: username,
-        password: password,
+        username,
+        password,
       });
-      //console.log(response.data);
       const token = response.data.token;
-      // บันทึก token ไว้ใน local storage
       localStorage.setItem("token", token);
       fetchUserData();
     } catch (error) {
