@@ -1,8 +1,8 @@
-import express, { Request, Response } from "express";
+import express, { Router, Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { User } from "../models/index";
-const router = express.Router();
+const router: Router = express.Router();
 
 const secret = "mysecret";
 
