@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import axios from "axios";
-import { API_BASE_URL } from "../config";
+import { API_BASE_URL } from "@/config";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function Home() {

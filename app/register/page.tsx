@@ -3,7 +3,7 @@ import { useState, ChangeEvent, FormEvent } from "react";
 import Link from "next/link";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { API_BASE_URL } from '../../config';
+import { API_BASE_URL } from '@/config';
 
 
 export default function Register() {
