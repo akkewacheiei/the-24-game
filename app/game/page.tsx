@@ -1,9 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import Navbar from "@/components/Navbar/index";
 import axios from "axios";
-import History from "../../components/History/index";
-import { API_BASE_URL } from "../../config";
+import History from "@/components/History/index";
+import { API_BASE_URL } from "@/config";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function Game() {
@@ -16,7 +16,7 @@ export default function Game() {
   const [validExpressions, setValidExpressions] = useState<string[]>([]);
   const [viewHistory, setViewHistory] = useState<boolean>(false);
 
-  const handleStart = async () => {
+  const handleStart = useCallback(async () => {
     setSolution("");
     setFeedback("");
     setValidExpressions([]);
@@ -27,9 +27,9 @@ export default function Game() {
     } catch (error) {
       console.error("Error generating numbers:", error);
     }
-  };
+  }, []);
 
-  const handleSubmitSolution = async () => {
+  const handleSubmitSolution = useCallback(async () => {
     try {
       const userId = user?.id;
       const response = await axios.post(`${API_BASE_URL}/submit-solution`, {
@@ -44,9 +44,9 @@ export default function Game() {
       console.error("Error submitting solution:", error);
       setFeedback("An error occurred while submitting your solution.");
     }
-  };
+  }, [user, numbers, solution]);
 
-  const handleGetSolutions = async () => {
+  const handleGetSolutions = useCallback(async () => {
     console.log("numbers:", numbers);
 
     try {
@@ -58,7 +58,7 @@ export default function Game() {
     } catch (error) {
       console.error("Error cheat:", error);
     }
-  };
+  }, [numbers]);
 
   return (
     <div>

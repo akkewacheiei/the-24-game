@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useContext, useReducer, useEffect } from "react";
+import { createContext, useContext, useReducer, useEffect, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { API_BASE_URL } from "../config";
@@ -45,18 +45,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [authState, authDispatch] = useReducer(reducer, { user: null });
   const router = useRouter();
 
-  const login = (user: User) => {
+  const login = useCallback((user: User) => {
     authDispatch({ type: "login", payload: { user } });
     router.push("/game");
-  };
+  }, [router]);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     localStorage.removeItem("token");
     authDispatch({ type: "logout" });
     router.push("/");
-  };
+  }, [router]);
 
-  const fetchUserData = async () => {
+  const fetchUserData = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -75,14 +75,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       console.error("Error fetching user data", error);
       router.push("/");
     }
-  };
+  }, [router]);
 
   useEffect(() => {
     fetchUserData();
-  }, []);
+  }, [fetchUserData]);
+
+  const value = useMemo(() => ({ authState, authDispatch, login, logout }), [authState, login, logout]);
 
   return (
-    <AuthContext.Provider value={{ authState, authDispatch, login, logout }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );

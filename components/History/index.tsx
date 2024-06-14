@@ -36,6 +36,7 @@ const HistoryPage: React.FC<user> = ({ userId }) => {
 
     fetchHistory();
   }, []);
+  
   return (
     <div>
       <div className="mt-4">
