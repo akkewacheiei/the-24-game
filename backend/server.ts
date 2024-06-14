@@ -1,7 +1,5 @@
 import cors from "cors";
-import express, { Request, Response } from "express";
-import cookieParser from "cookie-parser";
-import session from "express-session";
+import express from "express";
 import { sequelize } from "./config/db";
 import authRoutes from "./routes/auth";
 import gameRoutes from "./routes/game";
@@ -13,14 +11,6 @@ app.use(
   cors({
     credentials: true,
     origin: ["http://localhost:3000"],
-  })
-);
-app.use(cookieParser());
-app.use(
-  session({
-    secret: "secret",
-    resave: false,
-    saveUninitialized: true,
   })
 );
 
