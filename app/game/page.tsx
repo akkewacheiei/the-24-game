@@ -124,7 +124,7 @@ const Game = () => {
             </p>
           </div>
 
-          {validExpressions.length > 0 ? (
+          {validExpressions.length > 0 && (
             <div className="flex flex-col items-center">
               <h2> {`${validExpressions.length} solutions found`}</h2>
 
@@ -146,9 +146,8 @@ const Game = () => {
                 </tbody>
               </table>
             </div>
-          ) : (
-            <></>
           )}
+          
         </div>
       );
     } else {
