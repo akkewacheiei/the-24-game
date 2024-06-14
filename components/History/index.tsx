@@ -42,8 +42,8 @@ const HistoryPage: React.FC<user> = ({ userId }) => {
       <div className="mt-4">
         {history.length > 0 ? (
           <>
-            <h1 className="text-center font-bold text-xl">History</h1>
-            <table className="border-2">
+            <h1 className="text-center font-bold text-xl mb-5">History</h1>
+            <table className="border-2 bg-white">
               <thead>
                 <tr className="border-2">
                   <th className="border-2"></th>

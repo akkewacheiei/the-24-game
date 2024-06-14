@@ -11,7 +11,7 @@ const styles = {
     "border-[1px] shadow-lg rounded-lg bg-green-400 w-[10rem] h-[2.5rem] text-white font-bold",
   inputBox: "border rounded p-2",
   submitButton:
-    "ml-3 border-[1px] shadow-lg rounded-lg bg-green-400 w-[5rem] h-[2.5rem] text-white font-bold",
+    "border-[1px] shadow-lg rounded-lg bg-green-400 w-[5rem] text-white font-bold",
   solutionButton:
     "border-[1px] shadow-lg rounded-lg bg-green-400 w-[10rem] h-[2.5rem] text-white font-bold",
   clearButton: "text-red-600 font-bold cursor-pointer",
@@ -78,33 +78,37 @@ const Game = () => {
           <button onClick={() => setNumbers([])} className={styles.quitButton}>
             Quit
           </button>
-          <div className="mt-5 text-white text-xl">
-            Generated Numbers: {numbers.join(", ")}
-          </div>
-          <div className="mt-5">
-            <input
-              type="text"
-              value={solution}
-              onChange={(e) => setSolution(e.target.value)}
-              placeholder="Enter your solution"
-              className={styles.inputBox}
-            />
-            <button
-              onClick={handleSubmitSolution}
-              className={styles.submitButton}
-            >
-              Submit
-            </button>
-          </div>
-          {feedback && (
-            <div
-              className={`mt-5 ${
-                feedback === "Correct!" ? `text-white` : `text-red-500`
-              } font-bold text-xl`}
-            >
-              {feedback}
+          <p className="mt-10 text-white ">
+            Use all 4 numbers and + - * / to make 24
+          </p>
+          <p className="text-white text-3xl">{numbers.join(", ")}</p>
+          <div className="mb-10">
+            <div className="mt-5 flex gap-3">
+              <input
+                type="text"
+                value={solution}
+                onChange={(e) => setSolution(e.target.value)}
+                placeholder="Enter your solution"
+                className={styles.inputBox}
+              />
+              <button
+                onClick={handleSubmitSolution}
+                className={styles.submitButton}
+              >
+                Submit
+              </button>
             </div>
-          )}
+            {feedback && (
+              <div
+                className={`text-center mt-5 ${
+                  feedback === "Correct!" ? `text-white` : `text-red-500`
+                } font-bold text-xl`}
+              >
+                {feedback}
+              </div>
+            )}
+          </div>
+
           <div className="mt-5 flex items-center gap-6">
             <button
               onClick={handleGetSolutions}
@@ -119,14 +123,32 @@ const Game = () => {
               Clear
             </p>
           </div>
-          <h2>
-            {validExpressions.length > 0 &&
-              `${validExpressions.length} solutions found`}
-          </h2>
-          <div className="flex gap-10 flex-wrap w-[20rem]">
-            {validExpressions.length > 0 &&
-              validExpressions.map((item, index) => <p key={index}>{item}</p>)}
-          </div>
+
+          {validExpressions.length > 0 ? (
+            <div className="flex flex-col items-center">
+              <h2> {`${validExpressions.length} solutions found`}</h2>
+
+              <table className="bg-white">
+                <thead>
+                  <tr className="border-2">
+                    <th className="border-2"></th>
+
+                    <th className="border-2">solution</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {validExpressions.map((item, index) => (
+                    <tr className="border-2" key={index}>
+                      <td className="border-2 p-2">{index + 1}</td>
+                      <td className="border-2">{item}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
       );
     } else {
@@ -146,7 +168,7 @@ const Game = () => {
 
   const renderHistory = () => {
     return (
-      <>
+      <div>
         <p
           className="font-bold cursor-pointer"
           onClick={() => setViewHistory(false)}
@@ -154,7 +176,7 @@ const Game = () => {
           {"<- Main Page"}
         </p>
         <History userId={user?.id} />
-      </>
+      </div>
     );
   };
 
