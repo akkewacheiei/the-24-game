@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import axios from "axios";
 import { API_BASE_URL } from "../config";
@@ -19,10 +19,9 @@ export default function Home() {
     }
   }, []);
 
-  const fetchUserData = async () => {
+  const fetchUserData = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
-      //ส่ง token ไปกับคำขอ
       const response = await axios.get(`${API_BASE_URL}/user`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -32,9 +31,9 @@ export default function Home() {
     } catch (error) {
       console.error("Error fetching user data", error);
     }
-  };
+  }, [login]);
 
-  const handleSignIn = async () => {
+  const handleSignIn = useCallback(async () => {
     try {
       const response = await axios.post(`${API_BASE_URL}/login`, {
         username,
@@ -47,7 +46,7 @@ export default function Home() {
       console.error("Error logging in", error);
       setError("Invalid username or password. Please try again.");
     }
-  };
+  }, [username, password, fetchUserData]);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-300 to-purple-400 gap-11">
