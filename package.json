@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "first": "npm install && cd backend && npm install",
+    "docker": "cd backend && docker-compose up -d",
+    "backend": "cd backend && npx ts-node server.ts",
+    "frontend": "next dev",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
